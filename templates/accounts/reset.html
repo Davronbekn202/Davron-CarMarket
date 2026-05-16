@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+<title>Reset Password</title>
+{% endblock %}
+
+{% block content %}
+
+<div class="box">
+    <h2>EVOS | Reset Password</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+        <input type="password" name="password" placeholder="New password">
+        <button type="submit">Reset</button>
+    </form>
+
+    {% if success %}
+        <div class="msg success">{{ success }}</div>
+    {% endif %}
+</div>
+
+{% endblock %}

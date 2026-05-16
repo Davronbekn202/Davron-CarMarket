@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+<title>Forgot Password</title>
+{% endblock %}
+
+{% block content %}
+<div class="box">
+    <h2>EVOS | Forgot Password</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+        <input type="email" name="email" placeholder="Enter your email">
+        <button type="submit">Send OTP</button>
+    </form>
+
+    {% if error %}
+        <div class="msg error">{{ error }}</div>
+    {% endif %}
+
+    {% if success %}
+        <div class="msg success">{{ success }}</div>
+    {% endif %}
+</div>
+
+{% endblock %}

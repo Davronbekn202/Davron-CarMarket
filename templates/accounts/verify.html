@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+<title>Verify OTP</title>
+{% endblock %}
+
+{% block content %}
+
+<div class="box">
+    <h2>EVOS | Verify OTP</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+        <input type="text" name="code" placeholder="Enter OTP">
+        <button type="submit">Verify</button>
+    </form>
+
+    {% if error %}
+        <div class="msg error">{{ error }}</div>
+    {% endif %}
+</div>
+
+{% endblock %}

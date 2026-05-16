@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<title>Profile</title>
+{% endblock %}
+
+{% block content %}
+
+<div class="profile-wrapper">
+
+    <div class="profile-card">
+
+        <div class="profile-header">
+            <div class="avatar">
+                {{ info.username|first|upper }}
+            </div>
+
+            <div class="user-info">
+                <h2>{{ info.username }}</h2>
+
+                <p class="role">
+                    {{ info.get_user_role_display }}
+                </p>
+            </div>
+        </div>
+
+        <div class="profile-body">
+
+            <div class="info-item">
+                <span class="label">Email</span>
+                <span class="value">{{ info.email }}</span>
+            </div>
+
+            <div class="info-item">
+                <span class="label">Phone</span>
+                <span class="value">
+                    {% if info.phone_number %}
+                        {{ info.phone_number }}
+                    {% else %}
+                        Not set
+                    {% endif %}
+                </span>
+            </div>
+
+            <div class="info-item">
+                <span class="label">Role</span>
+                <span class="value role-badge">
+                    {{ info.get_user_role_display }}
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<style>
+    .profile-wrapper{
+        display:flex;
+        justify-content:center;
+        margin-top:50px;
+        font-family:Arial, sans-serif;
+    }
+
+    .profile-card{
+        width:400px;
+        background:#fff;
+        border-radius:16px;
+        box-shadow:0 10px 30px rgba(0,0,0,0.1);
+        overflow:hidden;
+    }
+
+    .profile-header{
+        background:linear-gradient(135deg,#4f46e5,#06b6d4);
+        padding:25px;
+        display:flex;
+        align-items:center;
+        gap:15px;
+        color:white;
+    }
+
+    .avatar{
+        width:55px;
+        height:55px;
+        border-radius:50%;
+        background:white;
+        color:#4f46e5;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        font-size:22px;
+        font-weight:bold;
+    }
+
+    .user-info h2{
+        margin:0;
+        font-size:20px;
+    }
+
+    .role{
+        margin:0;
+        font-size:13px;
+        opacity:0.9;
+    }
+
+    .profile-body{
+        padding:20px;
+    }
+
+    .info-item{
+        display:flex;
+        justify-content:space-between;
+        padding:10px 0;
+        border-bottom:1px solid #eee;
+    }
+
+    .label{
+        color:#888;
+        font-size:14px;
+    }
+
+    .value{
+        font-weight:500;
+        color:#333;
+    }
+
+    .role-badge{
+        padding:4px 10px;
+        border-radius:20px;
+        background:#eef2ff;
+        color:#4f46e5;
+        font-size:13px;
+    }
+</style>
+
+{% endblock %}
