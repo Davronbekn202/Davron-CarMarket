@@ -22,11 +22,6 @@ class CustomUser(AbstractUser):
 
     role = models.CharField(max_length=20, choices=Roles.choices, default=Roles.USER)
 
-    class UserRoles(models.TextChoices):
-        MANAGER = 'sotuvchi', 'Sotuvchi'
-        CUSTOMER = 'haridor', 'Haridor'
-
-    user_role = models.CharField(max_length=20, choices=UserRoles, default=UserRoles.CUSTOMER, blank=True)
     date_of_register = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
