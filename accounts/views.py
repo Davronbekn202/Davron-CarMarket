@@ -37,7 +37,7 @@ def user_login(request):
             login(request, user)
             return redirect('carapp:base')
 
-        return render(request, 'account/login.html', {
+        return render(request, 'accounts/login.html', {
             'error': 'Username yoki Password xato'})
 
     return render(request, 'accounts/login.html')

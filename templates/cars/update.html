@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+<title>Create Car</title>
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+    body{
+        background: #f4f8ff;
+        font-family: Arial, sans-serif;
+    }
+
+    .create-container{
+        width: 420px;
+        margin: 60px auto;
+        padding: 35px;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 102, 255, 0.15);
+    }
+
+    .create-container h1{
+        text-align: center;
+        color: #0066ff;
+        margin-bottom: 30px;
+        font-size: 32px;
+    }
+
+    .create-container form p{
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 18px;
+    }
+
+    .create-container label{
+        margin-bottom: 8px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .create-container input,
+    .create-container textarea,
+    .create-container select{
+        padding: 12px;
+        border: 2px solid #dbe7ff;
+        border-radius: 12px;
+        font-size: 15px;
+        transition: 0.3s;
+        outline: none;
+    }
+
+    .create-container input:focus,
+    .create-container textarea:focus,
+    .create-container select:focus{
+        border-color: #0066ff;
+        box-shadow: 0 0 10px rgba(0,102,255,0.2);
+    }
+
+    .submit-btn{
+        width: 100%;
+        padding: 14px;
+        border: none;
+        border-radius: 12px;
+        background: linear-gradient(to right, #0066ff, #3399ff);
+        color: white;
+        font-size: 17px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s;
+        margin-top: 10px;
+    }
+
+    .submit-btn:hover{
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0,102,255,0.3);
+    }
+
+</style>
+
+<div class="create-container">
+
+    <h1>Create Car</h1>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button type="submit" class="submit-btn">
+            Submit
+        </button>
+    </form>
+
+</div>
+
+{% endblock %}
