@@ -1,0 +1,393 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block title %}
+<title>{{ car.title }} — Davron Car Market</title>
+{% endblock %}
+
+{% block content %}
+
+<style>
+    /* Breadcrumb */
+    .breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 32px;
+        font-size: 13px;
+        color: #5a5550;
+    }
+
+    .breadcrumb a {
+        color: #5a5550;
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+
+    .breadcrumb a:hover { color: #c9a84c; }
+
+    .breadcrumb span { color: #3a3530; }
+
+    .breadcrumb-sep { color: #2a2a2a; }
+
+    /* Layout */
+    .detail-layout {
+        display: grid;
+        grid-template-columns: 1fr 400px;
+        gap: 32px;
+        align-items: start;
+    }
+
+    /* Left — image */
+    .detail-image-wrap {
+        position: relative;
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid rgba(255,255,255,0.06);
+        background: #111;
+    }
+
+    .detail-image-wrap img {
+        width: 100%;
+        aspect-ratio: 16/10;
+        object-fit: cover;
+        display: block;
+    }
+
+    .detail-img-badge {
+        position: absolute;
+        top: 16px;
+        left: 16px;
+        background: rgba(10,10,10,0.75);
+        border: 1px solid rgba(201,168,76,0.45);
+        color: #c9a84c;
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        padding: 5px 12px;
+        border-radius: 3px;
+        backdrop-filter: blur(8px);
+    }
+
+    /* Right — info card */
+    .detail-card {
+        background: #111111;
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 8px;
+        overflow: hidden;
+        position: sticky;
+        top: 90px;
+    }
+
+    .detail-card-header {
+        padding: 24px 24px 20px;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .detail-card-header .category-tag {
+        display: inline-block;
+        background: rgba(201,168,76,0.1);
+        border: 1px solid rgba(201,168,76,0.25);
+        color: #c9a84c;
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        padding: 4px 10px;
+        border-radius: 3px;
+        margin-bottom: 12px;
+    }
+
+    .detail-card-header h1 {
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 34px;
+        letter-spacing: 2px;
+        color: #f0ece4;
+        line-height: 1.05;
+        margin-bottom: 12px;
+    }
+
+    .detail-price {
+        font-size: 32px;
+        font-weight: 600;
+        color: #c9a84c;
+        line-height: 1;
+    }
+
+    .detail-price sup {
+        font-size: 16px;
+        vertical-align: super;
+        font-weight: 400;
+    }
+
+    /* Specs grid */
+    .detail-specs {
+        padding: 20px 24px;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0;
+    }
+
+    .spec-item {
+        padding: 12px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .spec-item:nth-last-child(-n+2) {
+        border-bottom: none;
+    }
+
+    .spec-item:nth-child(odd) {
+        padding-right: 16px;
+        border-right: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .spec-item:nth-child(even) {
+        padding-left: 16px;
+    }
+
+    .spec-label {
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #5a5550;
+        margin-bottom: 4px;
+    }
+
+    .spec-value {
+        font-size: 15px;
+        font-weight: 500;
+        color: #f0ece4;
+    }
+
+    .spec-value.highlight {
+        color: #c9a84c;
+    }
+
+    /* Seller info */
+    .detail-seller {
+        padding: 20px 24px;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .seller-avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: rgba(201,168,76,0.15);
+        border: 1px solid rgba(201,168,76,0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 18px;
+        letter-spacing: 1px;
+        color: #c9a84c;
+        flex-shrink: 0;
+    }
+
+    .seller-info .seller-label {
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #5a5550;
+        margin-bottom: 3px;
+    }
+
+    .seller-info .seller-name {
+        font-size: 15px;
+        font-weight: 500;
+        color: #f0ece4;
+    }
+
+    .seller-phone {
+        margin-left: auto;
+        text-align: right;
+    }
+
+    .seller-phone .phone-label {
+        font-size: 10px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #5a5550;
+        margin-bottom: 3px;
+    }
+
+    .seller-phone .phone-num {
+        font-size: 15px;
+        font-weight: 500;
+        color: #f0ece4;
+    }
+
+    /* Actions */
+    .detail-actions {
+        padding: 20px 24px;
+        display: flex;
+        gap: 10px;
+    }
+
+    .detail-actions a {
+        flex: 1;
+        display: block;
+        text-align: center;
+        padding: 12px 0;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        text-decoration: none;
+        transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+
+    .action-update {
+        background: transparent;
+        border: 1px solid rgba(255,255,255,0.12);
+        color: #a09a92;
+    }
+
+    .action-update:hover {
+        border-color: rgba(255,255,255,0.3);
+        color: #f0ece4;
+    }
+
+    .action-delete {
+        background: transparent;
+        border: 1px solid rgba(192,57,43,0.3);
+        color: #c0392b;
+    }
+
+    .action-delete:hover {
+        background: rgba(192,57,43,0.1);
+        border-color: rgba(192,57,43,0.6);
+    }
+
+    /* Description below image */
+    .detail-description {
+        margin-top: 24px;
+        background: #111;
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 8px;
+        padding: 24px;
+    }
+
+    .detail-description h3 {
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 20px;
+        letter-spacing: 2px;
+        color: #c9a84c;
+        margin-bottom: 14px;
+    }
+
+    .detail-description p {
+        font-size: 15px;
+        font-weight: 300;
+        color: #8a8680;
+        line-height: 1.8;
+    }
+
+    .posted-date {
+        margin-top: 14px;
+        font-size: 12px;
+        color: #3a3530;
+        letter-spacing: 0.5px;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+        .detail-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .detail-card {
+            position: static;
+        }
+    }
+</style>
+
+<!-- Breadcrumb -->
+<div class="breadcrumb">
+    <a href="{% url 'carapp:cars' %}">Cars</a>
+    <span class="breadcrumb-sep">›</span>
+    <span>{{ car.title }}</span>
+</div>
+
+<!-- Detail layout -->
+<div class="detail-layout">
+
+    <!-- Left: image + description -->
+    <div>
+        <div class="detail-image-wrap">
+            <img src="{{ car.image.url }}" alt="{{ car.title }}">
+            <span class="detail-img-badge">For Sale</span>
+        </div>
+
+        <div class="detail-description">
+            <h3>Description</h3>
+            <p>{{ car.description }}</p>
+            <p class="posted-date">Listed on {{ car.created_at|date:"F j, Y — H:i" }}</p>
+        </div>
+    </div>
+
+    <!-- Right: info card -->
+    <div class="detail-card">
+
+        <div class="detail-card-header">
+            <div class="category-tag">{{ car.category }}</div>
+            <h1>{{ car.title }}</h1>
+            <div class="detail-price"><sup>$</sup>{{ car.price }}</div>
+        </div>
+
+        <div class="detail-specs">
+            <div class="spec-item">
+                <div class="spec-label">Color</div>
+                <div class="spec-value">{{ car.color }}</div>
+            </div>
+            <div class="spec-item">
+                <div class="spec-label">Year</div>
+                <div class="spec-value highlight">{{ car.year }}</div>
+            </div>
+            <div class="spec-item">
+                <div class="spec-label">Mileage</div>
+                <div class="spec-value">{{ car.mileage }} km</div>
+            </div>
+            <div class="spec-item">
+                <div class="spec-label">Condition</div>
+                <div class="spec-value highlight">{{ car.condition }}</div>
+            </div>
+            {% if car.other_brand %}
+            <div class="spec-item" style="grid-column: span 2; border-right: none; padding-right:0;">
+                <div class="spec-label">Other Brand</div>
+                <div class="spec-value">{{ car.other_brand }}</div>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="detail-seller">
+            <div class="seller-avatar">{{ car.seller.username|slice:":2"|upper }}</div>
+            <div class="seller-info">
+                <div class="seller-label">Seller</div>
+                <div class="seller-name">{{ car.seller.username }}</div>
+            </div>
+            <div class="seller-phone">
+                <div class="phone-label">Phone</div>
+                <div class="phone-num">{{ car.phone_number }}</div>
+            </div>
+        </div>
+
+        <div class="detail-actions">
+            <a href="{% url 'carapp:car-update' car.pk %}" class="action-update">Edit</a>
+            <a href="{% url 'carapp:car-delete' car.pk %}" class="action-delete">Delete</a>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

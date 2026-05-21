@@ -1,0 +1,34 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block title %}
+<title>Create Car</title>
+{% endblock %}
+
+{% block content %}
+<div>
+    <select name="brand" id="brand">
+        <option value="chevrolet">Chevrolet</option>
+        <option value="kia">Kia</option>
+        <option value="hyundai">Hyundai</option>
+        <option value="other">Boshqa</option>
+    </select>
+
+    <div id="other-brand-box" style="display:none;">
+        <input type="text" name="other_brand" placeholder="Markani kiriting">
+    </div>
+
+    <script>
+        const brand = document.getElementById('brand');
+        const otherBox = document.getElementById('other-brand-box');
+
+        brand.addEventListener('change', function () {
+            if (this.value === 'other') {
+                otherBox.style.display = 'block';
+            } else {
+                otherBox.style.display = 'none';
+            }
+        });
+    </script>
+</div>
+{% endblock %}

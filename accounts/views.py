@@ -43,6 +43,7 @@ def user_login(request):
     return render(request, 'accounts/login.html')
 
 
+@login_required
 def user_logout(request):
     logout(request)
     return redirect('accounts:login')
@@ -53,8 +54,11 @@ def user_profile(request):
     info = request.user
     return render(request, 'accounts/profile.html', {'info': info})
 
-#OAuth
+
+# OAuth
 User = get_user_model()
+
+
 def send_google_auth(request):
     auth_url = (
         f"{settings.GOOGLE_AUTH_URL}"
@@ -94,7 +98,6 @@ def register_google_auth(request):
 
     if not email:
         return JsonResponse({'error': 'Email topilmadi'}, status=400)
-
 
     user, created = User.objects.get_or_create(
         email=email,

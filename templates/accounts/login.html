@@ -1,25 +1,199 @@
-{% extends 'base.html' %}
+{% extends 'main.html' %}
 {% block title %}
 <title>Login</title>
 {% endblock %}
 
 {% block content%}
 
-<h1>Login</h1>
+<style>
+    .login-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 60vh;
+    }
 
-<form method="POST">
-    {% csrf_token %}
-    <input type="text" name="username" placeholder="Username">
-    <br><br>
-    <input type="password" name="password" placeholder="Password">
-    <br><br>
+    .login-card {
+        width: 100%;
+        max-width: 420px;
+        background: #111111;
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 12px;
+        overflow: hidden;
+    }
 
-    <button type="submit">Login</button>
+    .login-card-header {
+        position: relative;
+        padding: 32px 32px 28px;
+        background: #161616;
+        border-bottom: 1px solid rgba(201,168,76,0.12);
+        overflow: hidden;
+    }
 
-</form>
+    .login-card-header::before {
+        content: '';
+        position: absolute;
+        top: -60px;
+        right: -60px;
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(201,168,76,0.07) 0%, transparent 70%);
+        pointer-events: none;
+    }
 
-<a href="{% url 'accounts:register' %}">Register</a>
+    .login-card-header .eyebrow {
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: #c9a84c;
+        margin-bottom: 8px;
+    }
 
-<a href="{% url 'carapp:base' %}">Back</a>
-<a href="{% url 'accounts:forgot' %}">Forget password</a>
+    .login-card-header h1 {
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 36px;
+        letter-spacing: 2px;
+        color: #f0ece4;
+        margin: 0;
+        line-height: 1;
+    }
+
+    .login-card-body {
+        padding: 28px 32px;
+    }
+
+    .field-group {
+        margin-bottom: 18px;
+    }
+
+    .field-group label {
+        display: block;
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #5a5550;
+        margin-bottom: 8px;
+    }
+
+    .field-group input {
+        width: 100%;
+        padding: 12px 16px;
+        background: #0a0a0a;
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 6px;
+        color: #f0ece4;
+        font-family: 'Outfit', sans-serif;
+        font-size: 14px;
+        outline: none;
+        transition: border-color 0.25s;
+    }
+
+    .field-group input::placeholder {
+        color: #3a3530;
+    }
+
+    .field-group input:focus {
+        border-color: rgba(201,168,76,0.5);
+    }
+
+    .login-card-body button {
+        width: 100%;
+        padding: 13px;
+        margin-top: 8px;
+        background: #c9a84c;
+        color: #0a0a0a;
+        font-family: 'Outfit', sans-serif;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background 0.25s, transform 0.2s;
+    }
+
+    .login-card-body button:hover {
+        background: #e8c96a;
+        transform: translateY(-1px);
+    }
+
+    .login-card-footer {
+        padding: 18px 32px 24px;
+        border-top: 1px solid rgba(255,255,255,0.04);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .login-card-footer a {
+        font-size: 13px;
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+
+    .link-register {
+        color: #c9a84c;
+    }
+
+    .link-register:hover {
+        color: #e8c96a;
+    }
+
+    .footer-right {
+        display: flex;
+        gap: 18px;
+    }
+
+    .link-muted {
+        color: #5a5550;
+    }
+
+    .link-muted:hover {
+        color: #a09a92;
+    }
+</style>
+
+<div class="login-wrapper">
+    <div class="login-card">
+
+        <div class="login-card-header">
+            <p class="eyebrow">Welcome Back</p>
+            <h1>Login</h1>
+        </div>
+
+        <div class="login-card-body">
+            <form method="POST">
+                {% csrf_token %}
+
+                <div class="field-group">
+                    <label>Username</label>
+                    <input type="text" name="username" placeholder="Enter your username">
+                </div>
+
+                <div class="field-group">
+                    <label>Password</label>
+                    <input type="password" name="password" placeholder="Enter your password">
+                </div>
+
+                <button type="submit">Login</button>
+            </form>
+        </div>
+
+        <div class="login-card-footer">
+            <a href="{% url 'accounts:register' %}" class="link-register">Create an account</a>
+            <div class="footer-right">
+                <a href="{% url 'carapp:base' %}" class="link-muted">Main menu</a>
+                <a href="{% url 'accounts:forgot' %}" class="link-muted">Forgot password?</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
 {% endblock %}

@@ -1,0 +1,292 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block title %}
+<title>Moshinaler — Davron Car Market</title>
+{% endblock %}
+
+{% block content %}
+
+<style>
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        margin-bottom: 40px;
+        padding-bottom: 24px;
+        border-bottom: 1px solid rgba(201,168,76,0.15);
+    }
+
+    .page-header-left .eyebrow {
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        color: #c9a84c;
+        margin-bottom: 8px;
+    }
+
+    .page-header-left h1 {
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 48px;
+        letter-spacing: 2px;
+        color: #f0ece4;
+        line-height: 1;
+    }
+
+    .page-header-left h1 span {
+        color: #c9a84c;
+    }
+
+    .btn-create {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 26px;
+        background: #c9a84c;
+        color: #0a0a0a;
+        font-family: 'Outfit', sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: background 0.25s, transform 0.2s;
+    }
+
+    .btn-create:hover {
+        background: #e8c96a;
+        transform: translateY(-1px);
+    }
+
+    .btn-create svg {
+        width: 16px;
+        height: 16px;
+        fill: #0a0a0a;
+    }
+
+    /* Cars grid */
+    .cars-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 24px;
+    }
+
+    .car-card {
+        background: #111111;
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 8px;
+        overflow: hidden;
+        transition: border-color 0.3s, transform 0.3s;
+        position: relative;
+    }
+
+    .car-card:hover {
+        border-color: rgba(201,168,76,0.35);
+        transform: translateY(-4px);
+    }
+
+    .car-card-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.5s ease;
+    }
+
+    .car-card:hover .car-card-image {
+        transform: scale(1.04);
+    }
+
+    .car-card-image-wrap {
+        overflow: hidden;
+        position: relative;
+    }
+
+    .car-card-badge {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        background: rgba(10,10,10,0.8);
+        border: 1px solid rgba(201,168,76,0.4);
+        color: #c9a84c;
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        padding: 4px 10px;
+        border-radius: 3px;
+        backdrop-filter: blur(6px);
+    }
+
+    .car-card-body {
+        padding: 20px;
+    }
+
+    .car-card-title {
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 22px;
+        letter-spacing: 1.5px;
+        color: #f0ece4;
+        margin-bottom: 6px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .car-card-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+    }
+
+    .car-card-price {
+        font-size: 20px;
+        font-weight: 600;
+        color: #c9a84c;
+    }
+
+    .car-card-date {
+        font-size: 12px;
+        color: #5a5550;
+    }
+
+    .car-card-actions {
+        display: flex;
+        gap: 8px;
+        border-top: 1px solid rgba(255,255,255,0.05);
+        padding-top: 16px;
+    }
+
+    .car-card-actions a {
+        flex: 1;
+        text-align: center;
+        padding: 9px 0;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        text-decoration: none;
+        transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+
+    .action-detail {
+        background: #c9a84c;
+        color: #0a0a0a;
+    }
+
+    .action-detail:hover {
+        background: #e8c96a;
+    }
+
+    .action-update {
+        background: transparent;
+        border: 1px solid rgba(255,255,255,0.12);
+        color: #a09a92;
+    }
+
+    .action-update:hover {
+        border-color: rgba(255,255,255,0.3);
+        color: #f0ece4;
+    }
+
+    .action-delete {
+        background: transparent;
+        border: 1px solid rgba(192,57,43,0.3);
+        color: #c0392b;
+    }
+
+    .action-delete:hover {
+        background: rgba(192,57,43,0.12);
+        border-color: rgba(192,57,43,0.6);
+    }
+
+    /* Empty state */
+    .empty-state {
+        text-align: center;
+        padding: 80px 20px;
+        color: #5a5550;
+    }
+
+    .empty-state svg {
+        width: 64px;
+        height: 64px;
+        fill: #2a2a2a;
+        margin-bottom: 20px;
+    }
+
+    .empty-state h3 {
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 28px;
+        letter-spacing: 2px;
+        color: #3a3530;
+        margin-bottom: 10px;
+    }
+
+    .empty-state p {
+        font-size: 14px;
+        margin-bottom: 28px;
+    }
+
+    @media (max-width: 640px) {
+        .page-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 20px;
+        }
+    }
+</style>
+
+<!-- Page header -->
+<div class="page-header">
+    <div class="page-header-left">
+        <p class="eyebrow">Available Inventory</p>
+        <h1>All <span>Cars</span></h1>
+    </div>
+    <a href="{% url 'carapp:car-create' %}" class="btn-create">
+        <svg viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg>
+        Add Listing
+    </a>
+</div>
+
+<!-- Cars grid -->
+{% if cars %}
+<div class="cars-grid">
+    {% for car in cars %}
+    <div class="car-card">
+
+        <div class="car-card-image-wrap">
+            <img src="{{ car.image.url }}" class="car-card-image" alt="{{ car.title }}">
+            <span class="car-card-badge">For Sale</span>
+        </div>
+
+        <div class="car-card-body">
+            <div class="car-card-title">{{ car.title }}</div>
+            <div class="car-card-meta">
+                <span class="car-card-price">${{ car.price }}</span>
+                <span class="car-card-date">{{ car.created_at|date:"Y-m-d" }}</span>
+            </div>
+            <div class="car-card-actions">
+                <a href="{% url 'carapp:car-detail' car.pk %}" class="action-detail">Detail</a>
+                <a href="{% url 'carapp:car-update' car.pk %}" class="action-update">Edit</a>
+                <a href="{% url 'carapp:car-delete' car.pk %}" class="action-delete">Delete</a>
+            </div>
+        </div>
+
+    </div>
+    {% endfor %}
+</div>
+
+{% else %}
+<div class="empty-state">
+    <svg viewBox="0 0 24 24"><path d="M5 11l1.5-4.5h11L19 11M3 17h1v1a1 1 0 002 0v-1h12v1a1 1 0 002 0v-1h1v-5l-2.5-6H5.5L3 12v5zm2.5-3a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm13 0a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/></svg>
+    <h3>No Cars Listed Yet</h3>
+    <p>Be the first to add a car to the marketplace.</p>
+    <a href="{% url 'carapp:car-create' %}" class="btn-create">Add First Listing</a>
+</div>
+{% endif %}
+
+{% endblock %}

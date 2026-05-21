@@ -1,6 +1,5 @@
 from django.contrib import admin
-from .models import Car,Category,LocationOfProduct
+from .models import Car, LocationOfProductModel
 
 admin.site.register(Car)
-admin.site.register(Category)
-admin.site.register(LocationOfProduct)
+admin.site.register(LocationOfProductModel)
